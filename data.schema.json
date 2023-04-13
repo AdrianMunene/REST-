@@ -1,0 +1,20 @@
+{
+    "rooms": {
+      "columns": [
+        { "name": "roomId", "type": "int"}
+      ]
+    },
+    "clients": {
+      "columns": [
+        {"name": "clientId", "type": "int"}
+      ]
+    },
+    "bookings": {
+      "columns": [
+        {"name": "bookingId", "type": "int"},
+        {"name": "clientId", "type": "int", "foreign_key": {"table": "clients", "column": "clientId"}},
+        {"name": "roomId", "type": "int", "foreign_key": {"table": "rooms", "column": "roomId"}}
+      ]
+    }
+  }
+  
