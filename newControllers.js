@@ -7,6 +7,7 @@ const fs = require('fs');
 
 const schema = fs.readFileSync('./data.schema.json', 'utf8');
 const schemaObj = JSON.parse(schema);
+
 const dataObj = {};
 Object.keys(schemaObj).forEach(table => {
     dataObj[table] = [];
@@ -47,11 +48,13 @@ const getBookings = (req, res)=>{
 };
 
 const createBooking = (req, res) =>{
-    const {clientId, roomId} = req.body;
-    if(!clientId && roomId){
+    var booking = req.body;
+    if(!booking){
         return res.status(400).json({success: false, message: 'Please provide an ID'});
     }
-    dataObj["bookings"].push(req.body);
+    //findOne clients table and rooms table
+    booking.bookingId = Number(req.body.clientId.toString() + req.body.roomId.toString());
+    dataObj["bookings"].push(booking);
     const data = JSON.stringify(dataObj);
     fs.writeFileSync('./data.json', data);
     res.status(201).json({success: true, data: dataObj["bookings"]});
@@ -64,4 +67,4 @@ module.exports = {
     createRoom,
     getBookings,
     createBooking
-}
+};
