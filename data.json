@@ -1,1 +1,1 @@
-{"rooms":[],"clients":[{"clientId":2}],"bookings":[]}
+{"rooms":[{"roomId":3}],"clients":[{"clientId":3}],"bookings":[{"roomId":3,"clientId":3,"bookingId":33,"checkInTime":"14/04/2023, 22:45:44","checkOutTime":"14/04/2023, 22:46:08"}]}
