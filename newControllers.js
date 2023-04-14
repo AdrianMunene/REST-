@@ -8,7 +8,6 @@ const Joi = require('joi');
 
 const schema = fs.readFileSync('./data.schema.json', 'utf8');
 const schemaObj = JSON.parse(schema);
-
 const dataObj = {};
 Object.keys(schemaObj).forEach(table => {
     dataObj[table] = [];
@@ -59,7 +58,7 @@ const createBooking = (req, res) =>{
     const clientLog = dataObj["clients"].find((clientLog)=> clientLog.clientId  === booking.clientId);
     const roomLog = dataObj["rooms"].find((roomLog)=> roomLog.roomId === booking.roomId);
     if(!clientLog || !roomLog){
-        return res.status(400).json({success: false, message: 'Unable to create booking with given Room or Client ID'});
+        return res.status(400).json({success: false, message: 'room or client ID does not exist'});
     }
     //Add bookingId and checkInTime to booking object
     booking.bookingId = Number(req.body.clientId.toString() + req.body.roomId.toString());
@@ -71,11 +70,28 @@ const createBooking = (req, res) =>{
     res.status(201).json({success: true, data: dataObj["bookings"]});
 };
 
+const updateBoooking = (req, res) =>{
+    const {id} = req.params;
+    const bookingLog = dataObj["bookings"].find((bookingLog)=> bookingLog.bookingId === Number(id));
+    if(!bookingLog){
+        return res.status(404).json({success: false, message: `no booking exists with ID ${id} `});
+    }
+    delete dataObj["bookings"].find((bookingLog)=> bookingLog.bookingId === id);
+
+    bookingLog.checkOutTime = new Date().toLocaleString();
+
+    const data = JSON.stringify(dataObj);
+    fs.writeFileSync('./data.json', data);
+
+    res.status(201).json({success: true, data: dataObj["bookings"]});
+};
+
 module.exports = { 
     getClients,
     createClient, 
     getRooms, 
     createRoom,
     getBookings,
-    createBooking
+    createBooking,
+    updateBoooking
 };

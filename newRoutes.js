@@ -7,11 +7,14 @@ const {
     getRooms, 
     createRoom,
     getBookings,
-    createBooking
+    createBooking,
+    updateBoooking
 } = require('./newControllers');
 
 router.route('/clients').get(getClients).post(createClient);
 router.route('/rooms').get(getRooms).post(createRoom);
 router.route('/bookings').get(getBookings).post(createBooking);
+router.route('/bookings/:id').put(updateBoooking);
+
 
 module.exports = router;
