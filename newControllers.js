@@ -1,8 +1,3 @@
-//create client, get client
-//create room, get room
-//create booking, get booking - 
-//Can only create booking if clientId and roomId exist and if booking status of said room is 0
-//delete booking to free up room
 const fs = require('fs');
 const Joi = require('joi');
 
@@ -23,6 +18,10 @@ const createClient = (req, res) =>{
     if (error){
         return res.status(400).json({success: false, message: 'Request body contains invalid arguments'})
     }
+    const identical = dataObj["clients"].find((identical)=> identical.clientId === req.body.clientId);
+    if(identical){
+        return res.status(400).json({success: false, message: 'client with given ID already exists'});
+    };
     dataObj["clients"].push(req.body);
     const data = JSON.stringify(dataObj);
     fs.writeFileSync('./data.json', data);
@@ -39,6 +38,10 @@ const createRoom = (req, res) =>{
     if (error){
         return res.status(400).json({success: false, message: 'Request body contains invalid arguments'})
     }
+    const identical = dataObj["rooms"].find((identical)=> identical.roomId === req.body.roomId);
+    if(identical){
+        return res.status(400).json({success: false, message: 'room with given ID already exists'});
+    };
     dataObj["rooms"].push(req.body);
     const data = JSON.stringify(dataObj);
     fs.writeFileSync('./data.json', data);
@@ -77,12 +80,9 @@ const updateBoooking = (req, res) =>{
         return res.status(404).json({success: false, message: `no booking exists with ID ${id} `});
     }
     delete dataObj["bookings"].find((bookingLog)=> bookingLog.bookingId === id);
-
     bookingLog.checkOutTime = new Date().toLocaleString();
-
     const data = JSON.stringify(dataObj);
     fs.writeFileSync('./data.json', data);
-
     res.status(201).json({success: true, data: dataObj["bookings"]});
 };
 

@@ -1,1 +1,1 @@
-{"rooms":[{"roomId":1},{"roomId":1},{"roomId":2}],"clients":[{"clientId":1},{"clientId":2}],"bookings":[{"clientId":1,"roomId":1,"bookingId":11,"checkInTime":"14/04/2023, 13:00:32","checkOutTime":"14/04/2023, 13:00:42"},{"clientId":2,"roomId":2,"bookingId":22,"checkInTime":"14/04/2023, 13:04:27","checkOutTime":"14/04/2023, 13:04:45"}]}
+{"rooms":[],"clients":[{"clientId":2}],"bookings":[]}
