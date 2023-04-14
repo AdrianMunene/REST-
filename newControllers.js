@@ -4,6 +4,7 @@
 //Can only create booking if clientId and roomId exist and if booking status of said room is 0
 //delete booking to free up room
 const fs = require('fs');
+const Joi = require('joi');
 
 const schema = fs.readFileSync('./data.schema.json', 'utf8');
 const schemaObj = JSON.parse(schema);
@@ -18,9 +19,10 @@ const getClients = (req, res)=>{
 };
 
 const createClient = (req, res) =>{
-    const {clientId} = req.body;
-    if(!clientId){
-        return res.status(400).json({success: false, message: 'Please provide an ID'});
+    const requestSchema = Joi.object({clientId: Joi.number().integer().min(0)});
+    const {error} = requestSchema.validate(req.body);
+    if (error){
+        return res.status(400).json({success: false, message: 'Request body contains invalid arguments'})
     }
     dataObj["clients"].push(req.body);
     const data = JSON.stringify(dataObj);
@@ -33,9 +35,10 @@ const getRooms = (req, res)=>{
 };
 
 const createRoom = (req, res) =>{
-    const {roomId} = req.body;
-    if(!roomId){
-        return res.status(400).json({success: false, message: 'Please provide an ID'});
+    const requestSchema = Joi.object({roomId: Joi.number().integer().min(0)});
+    const {error} = requestSchema.validate(req.body);
+    if (error){
+        return res.status(400).json({success: false, message: 'Request body contains invalid arguments'})
     }
     dataObj["rooms"].push(req.body);
     const data = JSON.stringify(dataObj);
@@ -48,12 +51,20 @@ const getBookings = (req, res)=>{
 };
 
 const createBooking = (req, res) =>{
-    var booking = req.body;
-    if(!booking){
-        return res.status(400).json({success: false, message: 'Please provide an ID'});
+    const booking = req.body;
+    if(!req.body.clientId || !req.body.roomId){
+        return res.status(400).json({success: false, message: 'Please provide an room and client ID'});
     }
-    //findOne clients table and rooms table
+    //find corresponding roomId and clientId for the booking you're trying to create
+    const clientLog = dataObj["clients"].find((clientLog)=> clientLog.clientId  === booking.clientId);
+    const roomLog = dataObj["rooms"].find((roomLog)=> roomLog.roomId === booking.roomId);
+    if(!clientLog || !roomLog){
+        return res.status(400).json({success: false, message: 'Unable to create booking with given Room or Client ID'});
+    }
+    //Add bookingId and checkInTime to booking object
     booking.bookingId = Number(req.body.clientId.toString() + req.body.roomId.toString());
+    booking.checkInTime = new Date().toLocaleString();
+
     dataObj["bookings"].push(booking);
     const data = JSON.stringify(dataObj);
     fs.writeFileSync('./data.json', data);
