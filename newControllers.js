@@ -1,3 +1,4 @@
+//controllers
 const fs = require('fs');
 const Joi = require('joi');
 
@@ -69,7 +70,7 @@ const createBooking = (req, res) =>{
         return res.status(400).json({success: false, message: 'room or client ID does not exist'});
     };
     booking.bookingId = Number(req.body.clientId.toString() + req.body.roomId.toString());
-    
+
     const identical = dataObj["bookings"].find((identical)=> identical.bookingId === booking.bookingId);
     if(identical){
         return res.status(400).json({success: false, message: 'room and client have already been assigned'});
