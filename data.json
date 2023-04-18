@@ -1,1 +1,1 @@
-{"rooms":[{"roomId":3}],"clients":[{"clientId":3}],"bookings":[{"roomId":3,"clientId":3,"bookingId":33,"checkInTime":"14/04/2023, 22:45:44","checkOutTime":"14/04/2023, 22:46:08"}]}
+{"rooms":[{"roomId":1},{"roomId":2}],"clients":[{"clientId":3},{"clientId":4}],"bookings":[{"roomId":2,"clientId":3,"bookingId":32,"checkInTime":"18/04/2023, 15:47:45","checkOutTime":"18/04/2023, 15:48:53"},{"roomId":1,"clientId":3,"bookingId":31,"checkInTime":"18/04/2023, 15:48:13","checkOutTime":"18/04/2023, 15:48:33"}]}
