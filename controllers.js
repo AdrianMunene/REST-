@@ -1,6 +1,7 @@
 //controllers
 const fs = require('fs');
 const Joi = require('joi');
+const { stringify } = require('querystring');
 
 const schema = fs.readFileSync('./data.schema.json', 'utf8');
 const schemaObj = JSON.parse(schema);
@@ -103,13 +104,32 @@ const updateBoooking = (req, res) => {
         return res.status(404).json({ success: false, message: `no booking exists with ID ${id} ` });
     };
 
-    delete dataObj["bookings"].find((bookingLog) => bookingLog.bookingId === id);
-
     bookingLog.checkOutTime = new Date().toLocaleString();
 
     const data = JSON.stringify(dataObj);
     fs.writeFileSync('./data.json', data);
     res.status(201).json({ success: true, data: dataObj["bookings"] });
+};
+
+const deleteBooking = (req, res) => {
+    const { id } = req.params;
+    const bookingLog = dataObj["bookings"].find((bookingLog)=>bookingLog.bookingId === Number(id));
+
+    if (!bookingLog){
+        return res.status(404).json({ success: false, message: `no booking exists with ID ${id} ` });
+    };
+    
+    const newObj = dataObj.bookings.filter((books) => books.bookingId !== bookingLog.bookingId);
+    dataObj.bookings = newObj;
+
+    const data = JSON.stringify(dataObj);   
+    fs.writeFileSync('./data.json', data);
+    res.status(201).json
+    ({
+        success: true, 
+        message: `room with id ${id[1]} is now open for booking`, 
+        data: dataObj["bookings"]
+    }); 
 };
 
 module.exports = {
@@ -120,5 +140,6 @@ module.exports = {
     getBookings,
     createBooking,
     updateBoooking,
+    deleteBooking,
     welcome
 };
