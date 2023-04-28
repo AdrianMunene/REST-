@@ -7,6 +7,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/api', router);
 
-app.listen(PORT, () => {
+app.listen(PORT || 42069, () => {
     console.log(`Server is listening on port ${PORT}....`);
   });
