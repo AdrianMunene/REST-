@@ -96,7 +96,7 @@ const createBooking = (req, res) => {
     res.status(201).json({ success: true, data: dataObj["bookings"] });
 };
 
-const updateBoooking = (req, res) => {
+const updateBooking = (req, res) => {
     const { id } = req.params;
     const bookingLog = dataObj["bookings"].find((bookingLog) => bookingLog.bookingId === Number(id));
 
@@ -139,7 +139,7 @@ module.exports = {
     createRoom,
     getBookings,
     createBooking,
-    updateBoooking,
+    updateBooking,
     deleteBooking,
     welcome
 };
